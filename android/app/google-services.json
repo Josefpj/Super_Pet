@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "561414526280",
+    "project_id": "dm2-super-pet",
+    "storage_bucket": "dm2-super-pet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561414526280:android:2d7fcae409ed2bdfcecf7d",
+        "android_client_info": {
+          "package_name": "dm2.pet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5jcisPo-zuNbBULNTHeRGn3tKMmzNR7I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
