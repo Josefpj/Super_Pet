@@ -1,3 +1,4 @@
 class AppCadenas {
-  static const String Titulo = 'Bienvenido';
+  // ignore: constant_identifier_names
+  static const String Titulo = 'Bienvenido Doctor';
 }

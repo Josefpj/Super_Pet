@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart'; // Importa Firebase Auth para la autenticación de usuarios
 import 'package:flutter/material.dart'; // Importa el paquete Flutter para crear interfaces de usuario
 import 'package:flutter/services.dart'; // Importa el paquete para trabajar con input formatters
-import 'package:dm2_pet/Recursos/cadenas.dart';
 
 // Define la clase LoginPage que extiende de StatefulWidget
 class LoginPage extends StatefulWidget {
@@ -54,7 +53,6 @@ class _LoginPageState extends State<LoginPage> {
                     width: 300,
                     height: 100,
                   ),
-                  Text(AppCadenas.Titulo),
                 ],
               ),
 
