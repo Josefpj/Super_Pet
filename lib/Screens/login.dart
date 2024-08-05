@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart'; // Importa Firebase Auth para la autenticación de usuarios
 import 'package:flutter/material.dart'; // Importa el paquete Flutter para crear interfaces de usuario
 import 'package:flutter/services.dart'; // Importa el paquete para trabajar con input formatters
+import 'package:dm2_pet/Recursos/responsive.dart'; //importa el paqueta para trabajar con el responsive
 
 // Define la clase LoginPage que extiende de StatefulWidget
 class LoginPage extends StatefulWidget {
@@ -35,6 +36,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Obtener el ancho y alto de la pantalla
+    final responsive = Responsive(context);
+
     // Construye el widget principal
     return Scaffold(
       backgroundColor: Colors.teal[100], // Establece el color de fondo
@@ -42,25 +46,20 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Column(
             children: [
-              const SizedBox(height: 150),
+              SizedBox(height: responsive.height(10)),
 
               //Imagen del logo
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/logo.png', // Ruta de la imagen del logo
-                    width: 300,
-                    height: 100,
-                  ),
-                ],
+              Image.asset(
+                'assets/logo.png', // Ruta de la imagen del logo
+                width: responsive.width(80),
+                height: responsive.height(10),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: responsive.height(5)),
 
               //Campo de texto para el email
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
+                padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
                 child: TextField(
                   controller: usuarioController,
                   inputFormatters: [
@@ -82,11 +81,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: responsive.height(2)),
 
               //Campo de texto para la contraseña
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
+                padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
                 child: TextField(
                   obscureText: true, // Oculta el texto de la contraseña
                   controller: passwordController,
@@ -105,53 +104,53 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: responsive.height(3)),
 
               //Boton Ingresar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
+                padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
                 child: GestureDetector(
                   onTap: signIn, // Llama a la función signIn al tocar el botón
                   child: Container(
-                    padding: const EdgeInsets.all(17),
+                    padding: EdgeInsets.all(responsive.height(1.8)),
                     decoration: BoxDecoration(
                       color: Colors.blue[600],
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
                         "Ingresar",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: responsive.fontSize(2.5),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: responsive.height(2)),
 
               //Boton Registrar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
+                padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
                 child: GestureDetector(
                   onTap:
                       signIn, // Llama a la función de registro (Falta cambiar)
                   child: Container(
-                    padding: const EdgeInsets.all(17),
+                    padding: EdgeInsets.all(responsive.height(1.8)),
                     decoration: BoxDecoration(
                       color: Colors.blue[600],
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
                         "Resgistrar",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: responsive.fontSize(2.5),
                         ),
                       ),
                     ),
@@ -159,17 +158,20 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: responsive.height(2)),
 
               //Texto de Olvidaste contraseña
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
                       "¿Olvidaste tu contraseña?",
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: responsive.fontSize(1.7),
+                      ),
                     )
                   ],
                 ),

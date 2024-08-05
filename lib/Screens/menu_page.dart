@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:dm2_pet/Recursos/responsive.dart';
 import 'dart:io';
 
 class MenuPage extends StatefulWidget {
@@ -60,24 +61,24 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Obtener el ancho y alto de la pantalla
+    final responsive = Responsive(context);
+
     return Scaffold(
       backgroundColor: Colors.teal[100],
       body: SafeArea(
         child: Center(
           child: Column(children: [
-            const SizedBox(height: 30),
+            SizedBox(height: responsive.height(1)),
+
             //Imagen del logo
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/logo.png', // Ruta de la imagen del logo
-                  width: 300,
-                  height: 100,
-                ),
-              ],
+            Image.asset(
+              'assets/logo.png', // Ruta de la imagen del logo
+              width: responsive.width(60),
+              height: responsive.height(15),
             ),
-            const SizedBox(height: 10),
+
+            SizedBox(height: responsive.height(1)),
 
             //Texto de Bienvenida
             const Padding(
@@ -89,15 +90,15 @@ class _MenuPageState extends State<MenuPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: responsive.height(1)),
 
             // Mostrar Imagen Capturada
             if (image != null)
               Padding(
-                padding: const EdgeInsets.all(15),
+                padding: EdgeInsets.all(responsive.height(2)),
                 child: Container(
-                  width: 350,
-                  height: 350,
+                  width: responsive.width(80),
+                  height: responsive.height(40),
                   decoration: BoxDecoration(border: Border.all()),
                   child: Image.file(
                     image!,
@@ -105,62 +106,63 @@ class _MenuPageState extends State<MenuPage> {
                   ),
                 ),
               ),
-            const SizedBox(height: 10),
+            SizedBox(height: responsive.height(1)),
 
             // Botón Capturar Imagen
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
+              padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
               child: GestureDetector(
                 onTap: () async {
                   await pickImage(); // Llama a la función pickImage al tocar el botón
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(17),
+                  padding: EdgeInsets.all(responsive.height(1.8)),
                   decoration: BoxDecoration(
                     color: Colors.green[600],
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       "Capturar Imagen",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: responsive.fontSize(2.3),
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: responsive.height(2)),
 
             //Boton Consultar Mascota
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
+              padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
               child: GestureDetector(
                 //onTap: signIn, // Llama a la función signIn al tocar el botón
                 child: Container(
-                  padding: const EdgeInsets.all(17),
+                  padding: EdgeInsets.all(responsive.height(1.8)),
                   decoration: BoxDecoration(
                     color: Colors.blue[600],
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       "Consultar Mascota",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: responsive.fontSize(2.3),
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 15),
+            SizedBox(height: responsive.height(2)),
 
+            //Boton de cerrar sesión
             Container(
               width: 60,
               height: 60,
@@ -173,7 +175,10 @@ class _MenuPageState extends State<MenuPage> {
                   FirebaseAuth.instance.signOut();
                   //exit(0);
                 },
-                icon: const Icon(Icons.exit_to_app),
+                icon: Icon(
+                  Icons.exit_to_app,
+                  size: responsive.iconSize(4),
+                ),
                 color: Colors.white,
               ),
             )
