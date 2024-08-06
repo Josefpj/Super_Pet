@@ -1,11 +1,8 @@
 import 'package:dm2_pet/Recursos/cadenas.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
+//import 'package:flutter/services.dart';
 import 'package:dm2_pet/Recursos/responsive.dart';
-import 'dart:io';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -15,50 +12,6 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  File? image;
-  bool imageTaken = false;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
-
-  Future pickImage() async {
-    try {
-      final pickedImage =
-          await ImagePicker().pickImage(source: ImageSource.camera);
-      if (pickedImage == null) return;
-      final imageTemporary = File(pickedImage.path);
-
-      // Sube la imagen a Firebase Storage
-      final imageURL = await uploadImageToFirebaseStorage(imageTemporary);
-
-      setState(() {
-        this.image = imageTemporary;
-        imageTaken = true;
-      });
-    } on PlatformException catch (e) {
-      print('Fallo al tomar la imagen: $e');
-    }
-  }
-
-  Future<String> uploadImageToFirebaseStorage(File imageFile) async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) return '';
-
-      final Reference storageReference = _storage
-          .ref()
-          .child('images/${user.uid}/${DateTime.now().toString()}.jpg');
-      final UploadTask uploadTask = storageReference.putFile(imageFile);
-
-      final TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
-
-      final String imageURL = await snapshot.ref.getDownloadURL();
-
-      return imageURL;
-    } catch (e) {
-      print('Error al cargar la imagen en Firebase Storage: $e');
-      return '';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // Obtener el ancho y alto de la pantalla
@@ -93,41 +46,25 @@ class _MenuPageState extends State<MenuPage> {
             SizedBox(height: responsive.height(1)),
 
             // Mostrar Imagen Capturada
-            if (image != null)
-              Padding(
-                padding: EdgeInsets.all(responsive.height(2)),
-                child: Container(
-                  width: responsive.width(80),
-                  height: responsive.height(40),
-                  decoration: BoxDecoration(border: Border.all()),
-                  child: Image.file(
-                    image!,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            SizedBox(height: responsive.height(1)),
 
-            // Botón Capturar Imagen
+            //Boton Consultar Perfil
             Padding(
               padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
               child: GestureDetector(
-                onTap: () async {
-                  await pickImage(); // Llama a la función pickImage al tocar el botón
-                },
+                //onTap: registroUsuario, // Llama a la función de registro usuario
                 child: Container(
                   padding: EdgeInsets.all(responsive.height(1.8)),
                   decoration: BoxDecoration(
-                    color: Colors.green[600],
+                    color: Colors.blue[600],
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
                     child: Text(
-                      "Capturar Imagen",
+                      "Consultar Perfil",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: responsive.fontSize(2.3),
+                        fontSize: responsive.fontSize(2.5),
                       ),
                     ),
                   ),
@@ -154,6 +91,32 @@ class _MenuPageState extends State<MenuPage> {
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: responsive.fontSize(2.3),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: responsive.height(2)),
+
+            //Boton Consultar Cita
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
+              child: GestureDetector(
+                //onTap: registroUsuario, // Llama a la función de registro usuario
+                child: Container(
+                  padding: EdgeInsets.all(responsive.height(1.8)),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[600],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Consultar Cita",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: responsive.fontSize(2.5),
                       ),
                     ),
                   ),

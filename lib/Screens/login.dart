@@ -1,3 +1,4 @@
+import 'package:dm2_pet/Screens/registro.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Importa Firebase Auth para la autenticación de usuarios
 import 'package:flutter/material.dart'; // Importa el paquete Flutter para crear interfaces de usuario
 import 'package:flutter/services.dart'; // Importa el paquete para trabajar con input formatters
@@ -19,10 +20,21 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
 
   // Función asincrónica para iniciar sesión usando Firebase Auth
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: usuarioController.text.trim(),
-      password: passwordController.text.trim(),
+  Future iniciarSesion() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: usuarioController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+    } on PlatformException catch (e) {
+      print('Datos incorrectos: $e');
+    }
+  }
+
+  void iniciarRegistro() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const RegistroPage()),
     );
   }
 
@@ -110,7 +122,8 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
                 child: GestureDetector(
-                  onTap: signIn, // Llama a la función signIn al tocar el botón
+                  onTap:
+                      iniciarSesion, // Llama a la función iniciar sesion al tocar el botón
                   child: Container(
                     padding: EdgeInsets.all(responsive.height(1.8)),
                     decoration: BoxDecoration(
@@ -136,8 +149,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
                 child: GestureDetector(
-                  onTap:
-                      signIn, // Llama a la función de registro (Falta cambiar)
+                  onTap: iniciarRegistro,
                   child: Container(
                     padding: EdgeInsets.all(responsive.height(1.8)),
                     decoration: BoxDecoration(
