@@ -1,7 +1,6 @@
 import 'package:dm2_pet/Recursos/cadenas.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter/services.dart';
 import 'package:dm2_pet/Recursos/responsive.dart';
 
 class MenuPage extends StatefulWidget {
@@ -44,8 +43,6 @@ class _MenuPageState extends State<MenuPage> {
               ),
             ),
             SizedBox(height: responsive.height(1)),
-
-            // Mostrar Imagen Capturada
 
             //Boton Consultar Perfil
             Padding(
@@ -103,7 +100,8 @@ class _MenuPageState extends State<MenuPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
               child: GestureDetector(
-                //onTap: registroUsuario, // Llama a la función de registro usuario
+                //onTap:
+                //registroUsuario, // Llama a la función de registro usuario
                 child: Container(
                   padding: EdgeInsets.all(responsive.height(1.8)),
                   decoration: BoxDecoration(

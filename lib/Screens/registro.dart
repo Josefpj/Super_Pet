@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Importa Firebase Auth para la autenticación de usuarios
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart'; // Importa el paquete Flutter para crear interfaces de usuario
 import 'package:flutter/services.dart'; // Importa el paquete para trabajar con input formatters
@@ -17,18 +16,24 @@ class RegistroPage extends StatefulWidget {
 
 // Define el estado asociado a RegistroPage
 class RegistroPageState extends State<RegistroPage> {
-  File? image;
-  bool imageTaken = false;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
+  File? image; // Para almacenar la imagen seleccionada
+  bool imageTaken = false; //Para verificar si se tomo una imagen
+
   TextEditingController nombre = TextEditingController();
   TextEditingController apellido = TextEditingController();
   TextEditingController dni = TextEditingController();
   TextEditingController correo = TextEditingController();
   TextEditingController password = TextEditingController();
   final firebaseFirest = FirebaseFirestore.instance;
+  final FirebaseStorage storage = FirebaseStorage.instance;
 
   registroUsuario() async {
     try {
+      String imageUrl = '';
+      if (image != null) {
+        imageUrl = await uploadImagen(image!);
+      }
+
       await firebaseFirest.collection('users').doc().set({
         //Registra en el firestore, en el formato establecido
         "Nombre": nombre.text,
@@ -36,9 +41,11 @@ class RegistroPageState extends State<RegistroPage> {
         "DNI": dni.text,
         "Correo": correo.text,
         "Contraseña": password.text,
+        "ImagenUrl": imageUrl,
       });
+      print('Usuario registrado con exito');
     } catch (e) {
-      print('Rellene los campos: $e');
+      print('Error al registrar usuario: $e');
     }
   }
 
@@ -49,35 +56,31 @@ class RegistroPageState extends State<RegistroPage> {
       if (pickedImage == null) return;
       final imageTemporary = File(pickedImage.path);
 
-      // Sube la imagen a Firebase Storage
-      final imageURL = await uploadImageToFirebaseStorage(imageTemporary);
-
       setState(() {
-        this.image = imageTemporary;
+        image = imageTemporary;
         imageTaken = true;
       });
+      print('Imagen capturada con exito');
     } on PlatformException catch (e) {
       print('Fallo al tomar la imagen: $e');
     }
   }
 
-  Future<String> uploadImageToFirebaseStorage(File imageFile) async {
+  Future<String> uploadImagen(File imageFile) async {
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) return '';
-
-      final Reference storageReference = _storage
-          .ref()
-          .child('images/${user.uid}/${DateTime.now().toString()}.jpg');
+      final String namefile = imageFile.path.split("/").last;
+      final Reference storageReference =
+          storage.ref().child('Perfiles').child(namefile);
       final UploadTask uploadTask = storageReference.putFile(imageFile);
-
-      final TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
-
-      final String imageURL = await snapshot.ref.getDownloadURL();
-
-      return imageURL;
-    } catch (e) {
+      final TaskSnapshot snapshot = await uploadTask.whenComplete(() => true);
+      final String imageUrl = await snapshot.ref.getDownloadURL();
+      print('Imagen subida con éxito: $imageUrl');
+      return imageUrl;
+    } on FirebaseException catch (e) {
       print('Error al cargar la imagen en Firebase Storage: $e');
+      return '';
+    } catch (e) {
+      print('Error inesperado al cargar la imagen en Firebase Storage: $e');
       return '';
     }
   }
@@ -105,19 +108,26 @@ class RegistroPageState extends State<RegistroPage> {
               SizedBox(height: responsive.height(0.5)),
 
               // Mostrar Imagen Capturada
-              if (image != null)
-                Padding(
-                  padding: EdgeInsets.all(responsive.height(2)),
-                  child: Container(
-                    width: responsive.width(40),
-                    height: responsive.height(20),
-                    decoration: BoxDecoration(border: Border.all()),
-                    child: Image.file(
-                      image!,
-                      fit: BoxFit.cover,
-                    ),
+              Padding(
+                padding: EdgeInsets.all(responsive.height(2)),
+                child: Container(
+                  width: responsive.width(40),
+                  height: responsive.height(20),
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                    //color: image == null ? Colors.grey : Colors.transparent,
                   ),
+                  child: image != null
+                      ? Image.file(
+                          image!,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          'assets/desconocido.png',
+                          fit: BoxFit.cover,
+                        ), //Muestra la imagen de fondo
                 ),
+              ),
 
               // Botón Capturar Imagen
               Padding(
