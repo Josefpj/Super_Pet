@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dm2_pet/Screens/login.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart'; // Importa el paquete Flutter para crear interfaces de usuario
 import 'package:flutter/services.dart'; // Importa el paquete para trabajar con input formatters
@@ -43,6 +44,13 @@ class RegistroPageState extends State<RegistroPage> {
         "Contraseña": password.text,
         "ImagenUrl": imageUrl,
       });
+
+      // Redirige a la pantalla de login después del registro exitoso
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+
       print('Usuario registrado con exito');
     } catch (e) {
       print('Error al registrar usuario: $e');
@@ -288,8 +296,9 @@ class RegistroPageState extends State<RegistroPage> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: responsive.width(10)),
                 child: GestureDetector(
-                  onTap:
-                      registroUsuario, // Llama a la función de registro usuario
+                  onTap: () {
+                    registroUsuario(); // Llama a la función de registro usuario
+                  },
                   child: Container(
                     padding: EdgeInsets.all(responsive.height(1.8)),
                     decoration: BoxDecoration(
